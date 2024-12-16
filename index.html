@@ -1,73 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>NDVI Viewer</title>
-  <script src="https://apis.google.com/js/api.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba NDVI</title>
 </head>
 <body>
-  <h1>NDVI Viewer</h1>
-  <div id="map" style="height: 500px; width: 100%;"></div>
-
-  <script>
-    // Carga Google Earth Engine
-    function initialize() {
-      gapi.load('client', () => {
-        gapi.client.init({
-          apiKey: AIzaSyCeKom5o4PXDWPeQv3fkfBY9Tide0SZ0yc,
-          discoveryDocs: ['https://earthengine.googleapis.com/$discovery/rest?version=v1'],
-        }).then(runApp);
-      });
-    }
-
-    function runApp() {
-      const ee = google.earthengine;
-
-      ee.initialize(null, null, () => {
-        const polygon = ee.Geometry.Polygon(
-          [[[-64.0, -35.0], [-64.0, -34.0], [-63.0, -34.0], [-63.0, -35.0], [-64.0, -35.0]]]
-        );
-
-        const startDate = '2024-01-15';
-        const endDate = '2024-03-25';
-
-        const sentinelImages = ee.ImageCollection('COPERNICUS/S2')
-          .filterDate(startDate, endDate)
-          .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 5))
-          .filterBounds(polygon)
-          .map(image => image.normalizedDifference(['B8', 'B4']).rename('NDVI'))
-          .median();
-
-        const visualizationParams = {
-          min: -1,
-          max: 1,
-          palette: ['blue', 'white', 'green']
-        };
-
-        const map = new google.maps.Map(document.getElementById('map'), {
-          center: { lat: -34.5, lng: -63.5 },
-          zoom: 8,
-        });
-
-        const tileUrl = sentinelImages.getMap(visualizationParams).urlFormat;
-        const mapType = new google.maps.ImageMapType({
-          getTileUrl: (coord, zoom) => {
-            const url = tileUrl.replace('{x}', coord.x)
-              .replace('{y}', coord.y)
-              .replace('{z}', zoom);
-            return url;
-          },
-          tileSize: new google.maps.Size(256, 256)
-        });
-
-        map.overlayMapTypes.push(mapType);
-      });
-    }
-
-    // Carga la API de Google Maps y GEE
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=TU_API_KEY_AQUÍ&callback=initialize`;
-    script.async = true;
-    document.head.appendChild(script);
-  </script>
+    <h1>¡Hola Mundo!</h1>
+    <p>Si ves este mensaje, GitHub Pages está funcionando correctamente.</p>
 </body>
 </html>
